@@ -1,6 +1,7 @@
 import pygame, sys, random
 from pygame.math import Vector2
 
+
 class FRUIT:
     def __init__(self):
         self.randomize()
@@ -15,9 +16,9 @@ class FRUIT:
         self.pos = Vector2(self.x, self.y)
 
 
-class SNAKE():
+class SNAKE:
     def __init__(self):
-        self.body = [Vector2(5,10), Vector2(6,10), Vector2(7,10)]
+        self.body = [Vector2(5,10), Vector2(4,10), Vector2(3,10)]
         self.direction = Vector2(1,0)
         self.new_block = False
 
@@ -43,7 +44,7 @@ class SNAKE():
         self.new_block = True
 
 
-class MAIN():
+class MAIN:
     def __init__(self):
         self.snake = SNAKE()
         self.fruit = FRUIT()
@@ -51,6 +52,7 @@ class MAIN():
     def update(self):
         self.snake.move()
         self.check_collision()
+        self.check_fail()
     
     def draw_ele(self):
         self.fruit.draw_fruit()
@@ -60,6 +62,19 @@ class MAIN():
         if self.fruit.pos == self.snake.body[0]:
             self.fruit.randomize()
             self.snake.add_block()
+        
+    def check_fail(self):
+        if not 0 <= self.snake.body[0].x < cell_num or not 0 <= self.snake.body[0].y < cell_num:
+            self.game_over()
+        
+        for block in self.snake.body[1:]:
+            if block == self.snake.body[0]:
+                self.game_over()
+
+    def game_over():
+        pygame.quit()
+        sys.exit()
+
 
 
 pygame.init()
@@ -68,16 +83,18 @@ cell_num = 20
 screen = pygame.display.set_mode((cell_size*cell_num,cell_size*cell_num))
 clock = pygame.time.Clock()
 
+
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE,150)
 
+
 main_game = MAIN()
+
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+            main_game.update()
         if event.type == SCREEN_UPDATE:
             main_game.update()
         if event.type == pygame.KEYDOWN:
@@ -96,7 +113,3 @@ while True:
     main_game.draw_ele()
     pygame.display.update()
     clock.tick(60)
-
-
-
-
