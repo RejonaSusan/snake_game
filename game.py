@@ -8,7 +8,7 @@ class FRUIT:
 
     def draw_fruit(self):
         fruit_rect = pygame.Rect(int(self.pos.x*cell_size), int(self.pos.y*cell_size), cell_size, cell_size)
-        pygame.draw.rect(screen, (126,166,114), fruit_rect)
+        pygame.draw.rect(screen, (197, 55, 76), fruit_rect)
 
     def randomize(self):
         self.x = random.randint(0,cell_num-1)
@@ -27,7 +27,7 @@ class SNAKE:
             x_pos = int(block.x * cell_size)
             y_pos = int(block.y * cell_size)
             block_rect = pygame.Rect(x_pos, y_pos, cell_size, cell_size)
-            pygame.draw.rect(screen, (133,191,122), block_rect)
+            pygame.draw.rect(screen, (143, 101, 75), block_rect)
 
     def move(self):
         if self.new_block == True:
@@ -57,6 +57,8 @@ class MAIN:
     def draw_ele(self):
         self.fruit.draw_fruit()
         self.snake.draw_snake()
+        self.score()
+
 
     def check_collision(self):
         if self.fruit.pos == self.snake.body[0]:
@@ -71,9 +73,18 @@ class MAIN:
             if block == self.snake.body[0]:
                 self.game_over()
 
-    def game_over():
+    def game_over(self):
         pygame.quit()
         sys.exit()
+
+    def score(self):
+        score_text = "Score: " + str(len(self.snake.body)-3)
+        score_surface = game_font.render(score_text,True,(56,74,12))
+        score_x = int(cell_size*cell_num - 60)
+        score_y = int(cell_size*cell_num - 40)
+        score_rect = score_surface.get_rect(center = (score_x, score_y))
+        screen.blit(score_surface,score_rect)
+
 
 
 
@@ -82,6 +93,7 @@ cell_size = 40
 cell_num = 20
 screen = pygame.display.set_mode((cell_size*cell_num,cell_size*cell_num))
 clock = pygame.time.Clock()
+game_font = pygame.font.Font(None, 25)
 
 
 SCREEN_UPDATE = pygame.USEREVENT
@@ -99,13 +111,17 @@ while True:
             main_game.update()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                main_game.snake.direction = Vector2(0,-1)
+                if main_game.snake.direction.y != 1:
+                    main_game.snake.direction = Vector2(0,-1)
             if event.key == pygame.K_DOWN:
-                main_game.snake.direction = Vector2(0,1)
+                if main_game.snake.direction.y != -1:    
+                    main_game.snake.direction = Vector2(0,1)
             if event.key == pygame.K_RIGHT:
-                main_game.snake.direction = Vector2(1,0)
+                if main_game.snake.direction.x != -1:
+                    main_game.snake.direction = Vector2(1,0)
             if event.key == pygame.K_LEFT:
-                main_game.snake.direction = Vector2(-1,0)
+                if main_game.snake.direction.x != 1:    
+                    main_game.snake.direction = Vector2(-1,0)
             
 
         
