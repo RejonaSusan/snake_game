@@ -53,6 +53,7 @@ class MAIN:
         self.snake.move()
         self.check_collision()
         self.check_fail()
+        
     
     def draw_ele(self):
         self.fruit.draw_fruit()
@@ -74,8 +75,11 @@ class MAIN:
                 self.game_over()
 
     def game_over(self):
+        score = len(self.snake.body) - 3
+        print(f"Game Over! Your Score: {score}")
         pygame.quit()
         sys.exit()
+        
 
     def score(self):
         score_text = "Score: " + str(len(self.snake.body)-3)
@@ -84,16 +88,14 @@ class MAIN:
         score_y = int(cell_size*cell_num - 40)
         score_rect = score_surface.get_rect(center = (score_x, score_y))
         screen.blit(score_surface,score_rect)
-
-
-
+        
 
 pygame.init()
 cell_size = 40
 cell_num = 20
 screen = pygame.display.set_mode((cell_size*cell_num,cell_size*cell_num))
 clock = pygame.time.Clock()
-game_font = pygame.font.Font(None, 25)
+game_font = pygame.font.Font('arial_1.ttf', 25)
 
 
 SCREEN_UPDATE = pygame.USEREVENT
@@ -124,7 +126,6 @@ while True:
                     main_game.snake.direction = Vector2(-1,0)
             
 
-        
     screen.fill((175, 215, 70))
     main_game.draw_ele()
     pygame.display.update()
