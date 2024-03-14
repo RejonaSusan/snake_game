@@ -20,7 +20,7 @@ class Agent:
         self.gamma = 0
         self.mem = deque(maxlen=max_mem)
         self.model = Linear_QNet(11,256,3)
-        self.trainer = Qtrainer(self.model, lr=lr, gamma=self.gamm)
+        self.trainer = Qtrainer(self.model, lr=lr, gamma=self.gamma)
 
     def get_state(self, game):
         head = game.snake[0]
@@ -93,8 +93,8 @@ class Agent:
             move = random.randint(0,2)
             final_move[move] = 1
         else:
-            state0 = torch.tensor(state, dtype=torch.float)
-            prediction = self.model.predict(state)
+            state = torch.tensor(state, dtype=torch.float)
+            prediction = self.model(state)
             move = torch.argmax(prediction).item()
             final_move[move] = 1
         
@@ -103,8 +103,8 @@ class Agent:
 
 
 def train():
-    _scores = []
-    _mean_scores = []
+    plot_scores = []
+    plot_mean_scores = []
     total = 0
     record = 0
     agent = Agent()
@@ -131,6 +131,11 @@ def train():
             
             print('Game: ', agent.num_games, 'Score: ', score, 'Record: ', record)
 
+            plot_scores.append(score)
+            total += score
+            mean_score = total/agent.num_games
+            plot_mean_scores.append(mean_score)
+            plot(plot_scores, plot_mean_scores)
 
 
 if __name__ == '__main__':
