@@ -3,6 +3,9 @@ import random
 import numpy as np
 from AI_snake_game import SnakeGameAI, Direction, Point
 from collections import deque
+from model import Linear_QNet, Qtrainer
+from helper import plot
+
 
 
 max_mem = 100_000
@@ -16,8 +19,8 @@ class Agent:
         self.epsilon = 0
         self.gamma = 0
         self.mem = deque(maxlen=max_mem)
-        self.model = None
-        self.trainer = None
+        self.model = Linear_QNet(11,256,3)
+        self.trainer = Qtrainer(self.model, lr=lr, gamma=self.gamm)
 
     def get_state(self, game):
         head = game.snake[0]
