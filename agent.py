@@ -7,7 +7,6 @@ from model import Linear_QNet, Qtrainer
 from helper import plot
 
 
-
 max_mem = 100_000
 batch_size = 1000
 lr = 0.001
